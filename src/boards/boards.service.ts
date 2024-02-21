@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Board, BoardStatus } from './board.model';
 import { v1 as uuid } from 'uuid';
 import { CreateBoardDto } from './dto/create-board.dto';
@@ -24,11 +24,14 @@ export class BoardsService {
     }
 
     getBoardById(id: string): Board {
-        return this.boards.find(board => board.id === id);
+        const board = this.boards.find(board => board.id === id);
+        if (!board) throw new NotFoundException('요청하신 데이터를 찾을 수 없습니다.');
+        return board;
     }
 
     deleteBoard(id: string): void {
-        this.boards = this.boards.filter(board => board.id !== id);
+        const foundBoard = this.getBoardById(id);
+        this.boards = this.boards.filter(board => board.id !== foundBoard.id);
     }
 
     updateBoardStatus(id: string, status: BoardStatus): Board {
