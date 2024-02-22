@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateBoardDto } from './dto/create-board.dto';
 import { BoardRepository } from './pipes/board.repository';
 import { Board } from './board.entity';
+import { BoardStatus } from './board-status.enum';
 
 @Injectable()
 export class BoardsService {
@@ -21,14 +22,15 @@ export class BoardsService {
         return board;
     }
 
-    // deleteBoard(id: string): void {
-    //     const foundBoard = this.getBoardById(id);
-    //     this.boards = this.boards.filter(board => board.id !== foundBoard.id);
-    // }
+    async deleteBoard(id: number): Promise<void> {
+        const result = await this.boardRepository.delete(id);
+        if (!result.affected) throw new NotFoundException('요청하신 데이터를 찾을 수 없습니다.');
+        return;
+    }
 
-    // updateBoardStatus(id: string, status: BoardStatus): Board {
-    //     const board = this.getBoardById(id);
+    // async updateBoardStatus(id: number, status: BoardStatus): Promise<Board> {
+    //     const board = await this.getBoardById(id);
     //     board.status = status;
-    //     return board;
+    //     return await this.boardRepository.save(board);
     // }
 }
