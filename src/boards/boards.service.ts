@@ -8,9 +8,9 @@ import { BoardStatus } from './board-status.enum';
 export class BoardsService {
     constructor(private readonly boardRepository: BoardRepository) { }
 
-    // getAllBoards(): Board[] {
-    //     return this.boards;
-    // }
+    async getAllBoards(): Promise<Board[]> {
+        return await this.boardRepository.find();
+    }
 
     createBoard(createBoardDto: CreateBoardDto): Promise<Board> {
         return this.boardRepository.createBoard(createBoardDto);
