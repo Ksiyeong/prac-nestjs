@@ -7,7 +7,14 @@ import { User } from './user.entity';
 export class AuthService {
     constructor(private readonly userRepository: UserRepository) { }
 
-    async signUp(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+    async existsByUsername(username: string): Promise<boolean> {
+        return await this.userRepository.existsBy({ username });
+    }
+
+    /*async*/ signUp(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+        // if (await this.existsByUsername(authCredentialsDto.username)) {
+        //     throw new ConflictException('username already exists');
+        // }
         return this.userRepository.createUser(authCredentialsDto);
     }
 }
