@@ -7,13 +7,13 @@ import { AuthCredentialsDto } from "./dto/auth-credential.dto";
 export class UserRepository extends Repository<User>{
     constructor(private dataSource: DataSource) { super(User, dataSource.createEntityManager()) }
 
-    async createUser(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+    async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
         const { username, password } = authCredentialsDto;
 
         const user = this.create({ username, password });
 
         try {
-            return await this.save(user);
+            await this.save(user);
         } catch (error) {
             if (error.code === '23505') {
                 throw new ConflictException('username already exists');
