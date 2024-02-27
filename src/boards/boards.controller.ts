@@ -9,16 +9,16 @@ import { GetUser } from 'src/auth/get-user.decorator';
 import { User } from 'src/auth/user.entity';
 
 @Controller('boards')
+@UseGuards(AuthGuard())
 export class BoardsController {
     constructor(private boardsService: BoardsService) { }
 
     @Get()
-    getAllBoards(): Promise<Board[]> {
-        return this.boardsService.getAllBoards();
+    getAllBoards(@GetUser() user: User): Promise<Board[]> {
+        return this.boardsService.getAllBoards(user);
     }
 
     @Post()
-    @UseGuards(AuthGuard())
     @UsePipes(ValidationPipe)
     createBoard(@Body() createBoardDto: CreateBoardDto, @GetUser() user: User): Promise<Board> {
         return this.boardsService.createBoard(createBoardDto, user);
