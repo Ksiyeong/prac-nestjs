@@ -30,8 +30,8 @@ export class BoardsService {
         return board;
     }
 
-    async deleteBoard(id: number): Promise<void> {
-        const result = await this.boardRepository.delete(id);
+    async deleteBoard(id: number, user: User): Promise<void> {
+        const result = await this.boardRepository.delete({ id, user });
         if (!result.affected) throw new NotFoundException('요청하신 데이터를 찾을 수 없습니다.');
         return;
     }
